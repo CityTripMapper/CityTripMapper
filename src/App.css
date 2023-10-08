@@ -1,0 +1,35 @@
+.App {
+  text-align: center;
+}
+
+.ant-menu-item {
+  color: #000000;
+  font-size: medium;
+  font-weight: bold;
+
+}
+
+.ant-menu {
+  display: flow;
+
+}
+
+#helpcenter {
+  color: #75BF7A;
+}
+
+.logo {
+  display: flex;
+  align-items: center;
+  margin-right: 60em;
+}
+
+.ant-menu-horizontal {
+  border-bottom: 2px solid #F9F9F9;
+  background-color: white
+}
+
+.App {
+  background-color: #F9F9F9;
+}
+
