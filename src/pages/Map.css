@@ -1,0 +1,23 @@
+.MapContainer {
+    position: relative;
+}
+
+.BottomLeftButton {
+    position: absolute;
+    bottom: 20px;
+    /* Adjust this value to change the vertical position */
+    left: 10px;
+    /* Adjust this value to change the horizontal position */
+    /* padding: 30px; */
+    background-color: #75BF7A;
+    color: #ffffff;
+    border: none;
+    cursor: pointer;
+    
+
+}
+
+.BottomLeftButton:hover {
+    background-color: #75bfb9;
+}
+
