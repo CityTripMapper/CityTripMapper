@@ -1,6 +1,7 @@
 import { Button, Col, Row, Image, Select, Form } from "antd";
-import React from "react";
 import { useNavigate } from "react-router-dom";
+
+import planImg from "../assets/plan.png";
 
 function Home() {
   const monumentOptions = [
@@ -84,13 +85,13 @@ function Home() {
           </Form.Item>
         </Form>
         <h3>
-          Our app helps you effortlessly navigate to the city's most renowned
-          monuments and landmarks, ensuring you make the most of your urban
-          exploration
+          {
+            "Our app helps you effortlessly navigate to the city's most renowned monuments and landmarks, ensuring you make the most of your urban exploration"
+          }
         </h3>
       </Col>
       <Col span={12}>
-        <Image src="/plan.png" preview={false} />
+        <Image src={planImg} preview={false} />
       </Col>
     </Row>
   );

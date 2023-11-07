@@ -13,11 +13,10 @@
     color: #ffffff;
     border: none;
     cursor: pointer;
-    
+
 
 }
 
 .BottomLeftButton:hover {
     background-color: #75bfb9;
 }
-

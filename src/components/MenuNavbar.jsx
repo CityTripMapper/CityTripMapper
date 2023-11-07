@@ -1,5 +1,3 @@
-// MenuComponent.js
-import React from "react";
 import { Menu, Avatar, Button } from "antd";
 import {
   HomeTwoTone,
@@ -7,6 +5,7 @@ import {
   BankTwoTone,
   AlertTwoTone,
 } from "@ant-design/icons";
+import PropTypes from "prop-types";
 
 const url = "https://cdn-icons-png.flaticon.com/512/9805/9805356.png";
 
@@ -65,8 +64,18 @@ const MenuComponent = ({ current, onClick }) => {
   ];
 
   return (
-    <Menu onClick={onClick} selectedKeys={[current]} mode="horizontal" items={items} />
+    <Menu
+      onClick={onClick}
+      selectedKeys={[current]}
+      mode="horizontal"
+      items={items}
+    />
   );
+};
+
+MenuComponent.propTypes = {
+  current: PropTypes.any,
+  onClick: PropTypes.func,
 };
 
 export default MenuComponent;
