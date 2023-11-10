@@ -73,7 +73,7 @@ function Home() {
               mode="multiple"
               allowClear
               style={{
-                width: "100%",
+                width: "70%",
                 marginBottom: "50px",
               }}
               placeholder="Select Monument"
