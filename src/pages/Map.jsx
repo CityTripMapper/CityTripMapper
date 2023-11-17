@@ -38,7 +38,7 @@ const Map = () => {
     textTransform: "uppercase",
   };
   return (
-    <div>
+    <div data-testid="map-component">
       <div className="MapContainer">
         <div className="GoogleMap" style={{ height: "93vh", width: "100%" }}>
           <GoogleMapReact

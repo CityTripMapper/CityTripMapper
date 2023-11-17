@@ -65,6 +65,7 @@ const MenuComponent = ({ current, onClick }) => {
 
   return (
     <Menu
+      data-testid="menu-component"
       onClick={onClick}
       selectedKeys={[current]}
       mode="horizontal"
