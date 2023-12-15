@@ -25,7 +25,11 @@ const MenuComponent = ({ current, onClick }) => {
               xxl: 50,
             }}
           />
+<<<<<<< HEAD
           <span style={{ color: "#75BF7A" }}>City Trip Mapper</span>
+=======
+          <span style={{ color: "#75BF7A" }}>CITYMAPER</span>
+>>>>>>> c10b23ee7b0215cc541d049c928715a218e07cd1
         </div>
       ),
       key: "Logo",
@@ -65,7 +69,10 @@ const MenuComponent = ({ current, onClick }) => {
 
   return (
     <Menu
+<<<<<<< HEAD
       data-testid="menu-component"
+=======
+>>>>>>> c10b23ee7b0215cc541d049c928715a218e07cd1
       onClick={onClick}
       selectedKeys={[current]}
       mode="horizontal"

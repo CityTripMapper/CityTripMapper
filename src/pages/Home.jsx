@@ -7,6 +7,7 @@ import planImg from "../assets/plan.png";
 
 function Home() {
   const [monumentOptions, setMonumentOptions] = useState([]);
+  const [allMonuments, setAllMonuments] = useState([]); // New state variable
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -19,6 +20,8 @@ function Home() {
       })
       .then((response) => response.json())
       .then((data) => {
+        // console.log("Fetched Monument Data:", data);
+        setAllMonuments(data); // Store all monuments in state
         setMonumentOptions(
           data.map((monument) => ({
             label: monument.name.fr,
@@ -34,15 +37,18 @@ function Home() {
 
   const handleSubmit = (values) => {
     const { selectedMonuments } = values;
-    const coordinates = selectedMonuments.map((monument) => {
-      const { latitude, longitude } = monument;
-      return {
-        latitude: parseFloat(latitude),
-        longitude: parseFloat(longitude),
-      };
-    });
 
-    navigate("/Map", { state: { coordinates } });
+    const selectedMonumentsData = allMonuments.filter((monument) =>
+      selectedMonuments.includes(`${monument.latitude},${monument.longitude}`)
+    );
+
+    const coordinates = selectedMonumentsData.map((monument) => ({
+      latitude: parseFloat(monument.latitude),
+      longitude: parseFloat(monument.longitude),
+    }));
+
+    // Pass selectedMonumentsData to Map component
+    navigate("/Map", { state: { coordinates, selectedMonumentsData } });
   };
 
   return (

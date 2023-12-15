@@ -15,7 +15,7 @@ const AnyReactComponent = ({ text }) => <div>{text}</div>;
 
 const Map = () => {
   const location = useLocation();
-  const { coordinates } = location.state || {};
+  const { coordinates, selectedMonumentsData } = location.state || {};
 
   const mapContainer = useRef(null);
   const map = useRef(null);
@@ -91,25 +91,35 @@ const Map = () => {
     }
   }, [coordinates]);
 
+
+  const shouldLogDetails = window.location.pathname === "/Map";
+
   const renderMonuments = () => {
-    if (!coordinates || coordinates.length === 0) {
-      return <p>No coordinates available</p>;
+    if (!coordinates || coordinates.length === 0 || !selectedMonumentsData) {
+      return <p>No coordinates or selected monuments data available</p>;
     }
 
-    const shouldLogDetails = window.location.pathname === "/Map";
-
     return coordinates.map((monument, index) => {
-      const name = monument.name ? monument.name.fr : "N/A";
+      const currentMonumentData = selectedMonumentsData[index] || {};
+      
+      const name = currentMonumentData.name && currentMonumentData.name.fr ? currentMonumentData.name.fr : "N/A";
+      const latitude = currentMonumentData.latitude || "N/A";
+      const longitude = currentMonumentData.longitude || "N/A";
+      const description =
+        currentMonumentData.description && currentMonumentData.description.fr
+          ? currentMonumentData.description.fr
+          : "N/A";
 
       // Log the details only if shouldLogDetails is true
       if (shouldLogDetails) {
         console.log(`Monument ${index + 1} Details:`);
         console.log(`Name: ${name}`);
-        console.log(`Latitude: ${monument.latitude}`);
-        console.log(`Longitude: ${monument.longitude}`);
+        console.log(`Latitude: ${latitude}`);
+        console.log(`Longitude: ${longitude}`);
+        console.log(`Description: ${description}`);
         console.log("----------------------------");
       }
-  
+
       return (
         <Card
           key={index}
@@ -131,6 +141,7 @@ const Map = () => {
       );
     });
   };
+
   
 
   return (
