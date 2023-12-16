@@ -1,17 +1,14 @@
 import { useRef, useEffect, useState } from "react";
 import { useLocation } from "react-router-dom";
-import "./Map.css";
-import { Drawer, Card } from "antd";
+import { Button, Drawer } from "antd";
 import mapboxgl from "mapbox-gl";
 import PropTypes from "prop-types";
 import "mapbox-gl/dist/mapbox-gl.css";
 import "@mapbox/mapbox-gl-directions/dist/mapbox-gl-directions.css";
 import MapboxDirections from "@mapbox/mapbox-gl-directions/dist/mapbox-gl-directions";
+import "./Map.css";
 mapboxgl.accessToken =
   "pk.eyJ1Ijoic3VwZXJub3ZhMjAyNCIsImEiOiJjbG5oaHFzOGsxZzhsMml3NTFudmpqY2FrIn0.6GGwWqLK729DVIuQ9R0tXQ";
-const { Meta } = Card;
-
-const AnyReactComponent = ({ text }) => <div>{text}</div>;
 
 const Map = () => {
   const location = useLocation();
@@ -19,7 +16,6 @@ const Map = () => {
 
   const mapContainer = useRef(null);
   const map = useRef(null);
-  // Remove unused state variables
   const [open, setOpen] = useState(false);
 
   const showDrawer = () => {
@@ -29,6 +25,7 @@ const Map = () => {
   const onClose = () => {
     setOpen(false);
   };
+
 
   const titleStyle = {
     color: "#75BF7A",
@@ -46,7 +43,6 @@ const Map = () => {
 
   useEffect(() => {
     if (!map.current) {
-      // Initialize a map instance
       map.current = new mapboxgl.Map({
         container: mapContainer.current,
         style: "mapbox://styles/mapbox/streets-v12",
@@ -54,11 +50,8 @@ const Map = () => {
         zoom: 12,
       });
 
-      map.current.on("move", () => {
-        // Update state variables based on map movements
-      });
+      map.current.on("move", () => {});
 
-      // Add Mapbox Directions control
       const directions = new MapboxDirections({
         accessToken: mapboxgl.accessToken,
         profile: "mapbox/walking",
@@ -72,7 +65,7 @@ const Map = () => {
           coord.longitude,
           coord.latitude,
         ]);
-        
+
         const destination = [
           coordinates[coordinates.length - 1].longitude,
           coordinates[coordinates.length - 1].latitude,
@@ -91,75 +84,38 @@ const Map = () => {
     }
   }, [coordinates]);
 
-
-  const shouldLogDetails = window.location.pathname === "/Map";
-
-  const renderMonuments = () => {
-    if (!coordinates || coordinates.length === 0 || !selectedMonumentsData) {
-      return <p>No coordinates or selected monuments data available</p>;
-    }
-
-    return coordinates.map((monument, index) => {
-      const currentMonumentData = selectedMonumentsData[index] || {};
-      
-      const name = currentMonumentData.name && currentMonumentData.name.fr ? currentMonumentData.name.fr : "N/A";
-      const latitude = currentMonumentData.latitude || "N/A";
-      const longitude = currentMonumentData.longitude || "N/A";
-      const description =
-        currentMonumentData.description && currentMonumentData.description.fr
-          ? currentMonumentData.description.fr
-          : "N/A";
-
-      // Log the details only if shouldLogDetails is true
-      if (shouldLogDetails) {
-        console.log(`Monument ${index + 1} Details:`);
-        console.log(`Name: ${name}`);
-        console.log(`Latitude: ${latitude}`);
-        console.log(`Longitude: ${longitude}`);
-        console.log(`Description: ${description}`);
-        console.log("----------------------------");
-      }
-
-      return (
-        <Card
-          key={index}
-          style={{
-            width: 300,
-            marginBottom: 50,
-          }}
-          cover={<img alt={`Monument ${index}`} src="https://via.placeholder.com/300" />}
-        >
-          <Meta
-            title={<span style={titleStyle}>{`Monument ${index + 1}`}</span>}
-            description={
-              <span style={descriptionStyle}>
-                Name: {name}, Latitude: {monument.latitude}, Longitude: {monument.longitude}
-              </span>
-            }
-          />
-        </Card>
-      );
-    });
-  };
-
-  
-
   return (
     <div>
       <div className="BottomLeftButton" onClick={showDrawer}>
-        {/* Remove the button */}
-        {/* <Button>Show API Test</Button> */}
+        <Button>Informations</Button>
       </div>
       <div className="MonumentsDrawer">
-        {/* Update the `visible` prop to `open` */}
         <Drawer title="Your Monuments Order" placement="right" onClose={onClose} open={open}>
-          {renderMonuments()}
+          <div>
+            {coordinates.map((monument, index) => {
+              const currentMonumentData = selectedMonumentsData[index] || {};
+              const name = currentMonumentData.name && currentMonumentData.name.fr ? currentMonumentData.name.fr : "N/A";
+              const description =
+                currentMonumentData.description && currentMonumentData.description.fr
+                  ? currentMonumentData.description.fr
+                  : "N/A";
+
+              return (
+                <div key={index} style={{ marginBottom: 50 }}>
+                  <h1 style={titleStyle}>{name}</h1>
+                  <p style={descriptionStyle}>{description}</p>
+                </div>
+              );
+            })}
+          </div>
         </Drawer>
       </div>
       <div ref={mapContainer} className="map-container" />
     </div>
   );
 };
+
+const AnyReactComponent = ({ text }) => <div>{text}</div>;
 
 AnyReactComponent.propTypes = {
   text: PropTypes.any,
