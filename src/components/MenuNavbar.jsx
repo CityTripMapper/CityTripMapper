@@ -7,10 +7,13 @@ import {
 } from "@ant-design/icons";
 import PropTypes from "prop-types";
 
+const iconStyle = { fontSize: "24px" };
+const buttonStyle = { backgroundColor: "#75BF7A", color: "white" };
+
 const url = "https://cdn-icons-png.flaticon.com/512/9805/9805356.png";
 
 const MenuComponent = ({ current, onClick }) => {
-  const items = [
+  const menuItems = [
     {
       label: (
         <div className="logo">
@@ -25,7 +28,7 @@ const MenuComponent = ({ current, onClick }) => {
               xxl: 50,
             }}
           />
-          <span style={{ color: "#75BF7A" }}>CITYMAPER</span>
+          <span style={{ color: "#75BF7A" }}>CITYTRIPMAPPER</span>
         </div>
       ),
       key: "Logo",
@@ -34,27 +37,25 @@ const MenuComponent = ({ current, onClick }) => {
     {
       label: "HOME",
       key: "home",
-      icon: <HomeTwoTone style={{ fontSize: "24px" }} />,
+      icon: <HomeTwoTone style={iconStyle} />,
     },
     {
       label: "HOW IT WORKS",
       key: "how",
-      icon: <BulbTwoTone style={{ fontSize: "24px" }} />,
+      icon: <BulbTwoTone style={iconStyle} />,
     },
     {
       label: "MONUMENTS",
       key: "monuments",
-      icon: <BankTwoTone style={{ fontSize: "24px" }} />,
+      icon: <BankTwoTone style={iconStyle} />,
     },
     {
       label: (
         <Button
           type="primary"
-          icon={
-            <AlertTwoTone twoToneColor="white" style={{ fontSize: "24px" }} />
-          }
+          icon={<AlertTwoTone twoToneColor="white" style={iconStyle} />}
           size="large"
-          style={{ backgroundColor: "#75BF7A", color: "white" }}
+          style={buttonStyle}
         >
           HELP CENTER
         </Button>
@@ -65,10 +66,11 @@ const MenuComponent = ({ current, onClick }) => {
 
   return (
     <Menu
+      data-testid="menu-component"
       onClick={onClick}
       selectedKeys={[current]}
       mode="horizontal"
-      items={items}
+      items={menuItems}
     />
   );
 };

@@ -1,5 +1,5 @@
 import { ConfigProvider, FloatButton } from "antd";
-import { useState } from "react";
+import React, { useState } from "react";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import MenuComponent from "./components/MenuNavbar";
 import { Home, Map } from "./pages";

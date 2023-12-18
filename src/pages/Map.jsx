@@ -1,60 +1,38 @@
-import React, { useRef, useEffect, useState } from "react";
+import { useRef, useEffect, useState } from "react";
 import { useLocation } from "react-router-dom";
-import "./Map.css";
-import { Button, Drawer, Card } from "antd";
-import louvreImg from "../assets/louvre.jpg";
-import eiffelImg from "../assets/eiffel.png";
-import PropTypes from "prop-types";
+import { Button, Divider, Drawer, Image } from "antd";
 import mapboxgl from "mapbox-gl";
+import PropTypes from "prop-types";
 import "mapbox-gl/dist/mapbox-gl.css";
 import "@mapbox/mapbox-gl-directions/dist/mapbox-gl-directions.css";
 import MapboxDirections from "@mapbox/mapbox-gl-directions/dist/mapbox-gl-directions";
+import "./Map.css";
+mapboxgl.accessToken = import.meta.env.VITE_REACT_APP_MAPBOX_API_KEY;
 
-mapboxgl.accessToken =
-  "pk.eyJ1Ijoic3VwZXJub3ZhMjAyNCIsImEiOiJjbG5oaHFzOGsxZzhsMml3NTFudmpqY2FrIn0.6GGwWqLK729DVIuQ9R0tXQ";
-const { Meta } = Card;
-
-const AnyReactComponent = ({ text }) => <div>{text}</div>;
-const monuments = [
-  {
-    name: "EIFFEL TOWER",
-    // image: eiffelImg,
-    description: "The Popular EIFFEL TOWER built by Gustave Eiffel",
-  },
-  {
-    name: "LOUVRE",
-    // image: louvreImg,
-    description: "The Louvre, or the Louvre Museum, is a national art museum in Paris, France.",
-  },
-  
-];
 const Map = () => {
   const location = useLocation();
-  const { coordinates } = location.state || {};
+  const { coordinates, selectedMonumentsData } = location.state || {};
 
   const mapContainer = useRef(null);
   const map = useRef(null);
   const [open, setOpen] = useState(false);
+
   const showDrawer = () => {
     setOpen(true);
   };
+
   const onClose = () => {
     setOpen(false);
   };
 
   const titleStyle = {
-    color: "#75BF7A",
+    color: "#1677ff",
     fontSize: 20,
     fontWeight: 600,
   };
 
-  const descriptionStyle = {
-    fontStyle: "italic",
-    fontWeight: 700,
-    fontSize: 14,
-    color: "blue",
-    textTransform: "uppercase",
-  };
+  
+
 
   useEffect(() => {
     if (!map.current) {
@@ -65,9 +43,7 @@ const Map = () => {
         zoom: 12,
       });
 
-      map.current.on("move", () => {
-        // Update state variables based on map movements
-      });
+      map.current.on("move", () => {});
 
       const directions = new MapboxDirections({
         accessToken: mapboxgl.accessToken,
@@ -81,6 +57,7 @@ const Map = () => {
         const waypoints = coordinates
           .slice(1, -1)
           .map((coord) => [coord.longitude, coord.latitude]);
+
         const destination = [
           coordinates[coordinates.length - 1].longitude,
           coordinates[coordinates.length - 1].latitude,
@@ -102,7 +79,7 @@ const Map = () => {
   return (
     <div>
       <div className="BottomLeftButton" onClick={showDrawer}>
-        <Button>Informations</Button>
+        <Button>Click to view Informations</Button>
       </div>
       <div className="MonumentsDrawer">
         <Drawer
@@ -112,13 +89,40 @@ const Map = () => {
           open={open}
         >
           <div>
-            {monuments.map((monument, index) => (
-              <div key={index} style={{ marginBottom: 50 }}>
-                {/* <img alt={monument.name} src={monument.image} /> */}
-                <h1 style={titleStyle}>{monument.name}</h1>
-                <p style={descriptionStyle}>{monument.description}</p>
-              </div>
-            ))}
+            {coordinates.map((monument, index) => {
+              const currentMonumentData = selectedMonumentsData[index] || {};
+              const {
+                name: { fr: name = "N/A" } = {},
+                description: { fr: description = "N/A" } = {},
+                creationDate: creationdate,
+                category: image = "",
+              } = currentMonumentData;
+
+              const imageName = `${image.toLowerCase()}.jpg`;
+              const imagePath = `./src/assets/${imageName}`;
+
+              return (
+                <div key={index} >
+                  <Divider style={titleStyle} >{name}</Divider>
+                  <Image
+                    className="description-image"
+                    wrapperClassName="description-image-w"
+                    width={300}
+                    src={imagePath}
+                  />
+                  <h1 className="date-creation" >
+                    {" "}
+                    Date de Création :{" "}
+                    {Intl.DateTimeFormat("fr-FR", {
+                      year: "numeric",
+                      month: "long",
+                      day: "numeric",
+                    }).format(new Date(creationdate))}
+                  </h1>
+                  <p className="monument-description">{description}</p>
+                </div>
+              );
+            })}
           </div>
         </Drawer>
       </div>
@@ -126,6 +130,8 @@ const Map = () => {
     </div>
   );
 };
+
+const AnyReactComponent = ({ text }) => <div>{text}</div>;
 
 AnyReactComponent.propTypes = {
   text: PropTypes.any,

@@ -1,36 +1,35 @@
 import { Button, Col, Row, Image, Select, Form } from "antd";
 import { useNavigate } from "react-router-dom";
 import { useState, useEffect } from "react";
-// import { useLocation } from 'react-router-dom';
 import { storage } from "../../firebase";
 import { getDownloadURL, ref } from "firebase/storage";
-
 import planImg from "../assets/plan.png";
 
 function Home() {
   const [monumentOptions, setMonumentOptions] = useState([]);
+  const [allMonuments, setAllMonuments] = useState([]); // New state variable
   const navigate = useNavigate();
 
   useEffect(() => {
-    const fileRef = ref(storage, "monumentsParis.json");
+    // const fileRef = ref(storage, "monumentsParis.json");
+    const fileRef = ref(storage, "monumentstest.json");
 
     getDownloadURL(fileRef)
       .then((url) => {
-        // Append a timestamp to the URL for cache-busting
         const timestampedURL = `${url}?_=${new Date().getTime()}`;
         return fetch(timestampedURL);
       })
       .then((response) => response.json())
       .then((data) => {
-        // Assuming data is an array directly
+        // console.log("Fetched Monument Data:", data);
+        setAllMonuments(data); // Store all monuments in state
         setMonumentOptions(
           data.map((monument) => ({
-            label: monument.name.fr,  // Assuming you want to display the French name
+            label: monument.name.fr,
             value: monument.latitude + ',' + monument.longitude,
             ...monument,
           }))
         );
-        
       })
       .catch((error) => {
         console.error("Error fetching data:", error);
@@ -39,20 +38,23 @@ function Home() {
 
   const handleSubmit = (values) => {
     const { selectedMonuments } = values;
-    const coordinates = selectedMonuments.map((monument) => {
-      const [latitude, longitude] = monument.split(',');
-      return {
-        latitude: parseFloat(latitude),
-        longitude: parseFloat(longitude),
-      };
-    });
-    navigate("/Map", { state: { coordinates } });
+
+    const selectedMonumentsData = allMonuments.filter((monument) =>
+      selectedMonuments.includes(`${monument.latitude},${monument.longitude}`)
+    );
+
+    const coordinates = selectedMonumentsData.map((monument) => ({
+      latitude: parseFloat(monument.latitude),
+      longitude: parseFloat(monument.longitude),
+    }));
+
+    // Pass selectedMonumentsData to Map component
+    navigate("/Map", { state: { coordinates, selectedMonumentsData } });
   };
 
-
-  
+  console.log(monumentOptions)
   return (
-    <Row align={"middle"} style={{ marginLeft: "30px" }}>
+    <Row align={"middle"} style={{ marginLeft: "30px" }} data-testid="home-component">
       <Col span={12}>
         <h2 style={{ color: "#75BF7A", textTransform: "uppercase" }}>
           SELECT MONUMENTS
@@ -60,6 +62,7 @@ function Home() {
         <Form onFinish={handleSubmit}>
           <Form.Item name="selectedMonuments">
             <Select
+              data-testid="monument-select"
               className="MonumentSelect"
               size="large"
               placement="topLeft"
