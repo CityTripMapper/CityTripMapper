@@ -67,6 +67,7 @@ function Home() {
         <Form onFinish={handleSubmit}>
           <Form.Item name="selectedMonuments">
             <Select
+              data-testid="monument-select"
               className="MonumentSelect"
               size="large"
               placement="topLeft"

@@ -1,0 +1,30 @@
+import React from 'react'
+import { describe, it, expect } from 'vitest'
+import { render, screen, fireEvent } from '@testing-library/react'
+import { MemoryRouter } from 'react-router-dom';
+import { Home } from './Home'
+
+describe('Home', () => {
+    it('renders Home component', () => {
+        render(
+            <MemoryRouter>
+                <Home />
+            </MemoryRouter>
+        );
+        expect(screen.getByText('SELECT MONUMENTS')).toBeInTheDocument();
+    });
+
+    it('should select a monument from the list', () => {
+        render(
+            <MemoryRouter>
+                <Home />
+            </MemoryRouter>
+        );
+
+        const selectElement = screen.getByTestId('monument-select').querySelector('input');
+        fireEvent.change(selectElement, { target: { value: ['eiffel'] } });
+
+        const selectedOption = screen.getByText('Eiffel Tower');
+        expect(selectedOption).toBeInTheDocument();
+    });
+});
