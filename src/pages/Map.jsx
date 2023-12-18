@@ -7,8 +7,7 @@ import "mapbox-gl/dist/mapbox-gl.css";
 import "@mapbox/mapbox-gl-directions/dist/mapbox-gl-directions.css";
 import MapboxDirections from "@mapbox/mapbox-gl-directions/dist/mapbox-gl-directions";
 import "./Map.css";
-mapboxgl.accessToken =
-  "pk.eyJ1Ijoic3VwZXJub3ZhMjAyNCIsImEiOiJjbG5oaHFzOGsxZzhsMml3NTFudmpqY2FrIn0.6GGwWqLK729DVIuQ9R0tXQ";
+mapboxgl.accessToken = import.meta.env.VITE_REACT_APP_MAPBOX_API_KEY;
 
 const Map = () => {
   const location = useLocation();
@@ -26,7 +25,6 @@ const Map = () => {
     setOpen(false);
   };
 
-
   const titleStyle = {
     color: "#75BF7A",
     fontSize: 20,
@@ -40,6 +38,11 @@ const Map = () => {
     color: "blue",
     textTransform: "uppercase",
   };
+  
+  const imageStyle={
+    width: 300,
+    marginBottom: 50,  
+  }
 
   useEffect(() => {
     if (!map.current) {
@@ -84,10 +87,12 @@ const Map = () => {
     }
   }, [coordinates]);
 
+
+
   return (
     <div>
       <div className="BottomLeftButton" onClick={showDrawer}>
-        <Button>Informations</Button>
+        <Button>Click to view Informations</Button>
       </div>
       <div className="MonumentsDrawer">
         <Drawer title="Your Monuments Order" placement="right" onClose={onClose} open={open}>
@@ -100,8 +105,15 @@ const Map = () => {
                   ? currentMonumentData.description.fr
                   : "N/A";
 
+              const image = currentMonumentData.category || "";
+              const imageName = `${image.toLowerCase()}.jpg`;
+              const imagePath =  `src/assets/${imageName}`;
+              console.log('Complete Image Path:', imagePath);
+              
+
               return (
                 <div key={index} style={{ marginBottom: 50 }}>
+                <img src={imagePath} alt={image} style={imageStyle} />
                   <h1 style={titleStyle}>{name}</h1>
                   <p style={descriptionStyle}>{description}</p>
                 </div>
