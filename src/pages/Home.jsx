@@ -13,7 +13,7 @@ function Home() {
   useEffect(() => {
     // const fileRef = ref(storage, "monumentsParis.json");
     const fileRef = ref(storage, "monumentstest.json");
-    
+
     getDownloadURL(fileRef)
       .then((url) => {
         const timestampedURL = `${url}?_=${new Date().getTime()}`;
@@ -53,7 +53,7 @@ function Home() {
   };
 
   return (
-    <Row align={"middle"} style={{ marginLeft: "30px" }}>
+    <Row align={"middle"} style={{ marginLeft: "30px" }} data-testid="home-component">
       <Col span={12}>
         <h2 style={{ color: "#75BF7A", textTransform: "uppercase" }}>
           SELECT MONUMENTS
