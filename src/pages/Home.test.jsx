@@ -22,9 +22,9 @@ describe('Home', () => {
         );
 
         const selectElement = screen.getByTestId('monument-select').querySelector('input');
-        fireEvent.change(selectElement, { target: { value: ['eiffel'] } });
+        fireEvent.change(selectElement, { target: { value: 'Tour Eiffel' } });
 
-        const selectedOption = screen.getByText('Eiffel Tower');
+        const selectedOption = screen.getByText('Tour Eiffel');
         expect(selectedOption).toBeInTheDocument();
     });
 });

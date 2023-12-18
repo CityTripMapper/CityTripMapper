@@ -52,6 +52,7 @@ function Home() {
     navigate("/Map", { state: { coordinates, selectedMonumentsData } });
   };
 
+  console.log(monumentOptions)
   return (
     <Row align={"middle"} style={{ marginLeft: "30px" }} data-testid="home-component">
       <Col span={12}>
@@ -61,6 +62,7 @@ function Home() {
         <Form onFinish={handleSubmit}>
           <Form.Item name="selectedMonuments">
             <Select
+              data-testid="monument-select"
               className="MonumentSelect"
               size="large"
               placement="topLeft"
