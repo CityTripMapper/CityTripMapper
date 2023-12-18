@@ -1,6 +1,6 @@
 import { useRef, useEffect, useState } from "react";
 import { useLocation } from "react-router-dom";
-import { Button, Drawer } from "antd";
+import { Button, Divider, Drawer, Image } from "antd";
 import mapboxgl from "mapbox-gl";
 import PropTypes from "prop-types";
 import "mapbox-gl/dist/mapbox-gl.css";
@@ -26,29 +26,13 @@ const Map = () => {
   };
 
   const titleStyle = {
-    color: "#75BF7A",
+    color: "#1677ff",
     fontSize: 20,
     fontWeight: 600,
   };
 
-  const descriptionStyle = {
-    fontStyle: "italic",
-    fontWeight: 700,
-    fontSize: 14,
-    color: "blue",
-    textTransform: "uppercase",
-  };
   
-  const imageStyle={
-    width: 300,
-    marginBottom: 50,  
-  }
 
-  const DateStyle={
-    color: "black",
-    fontSize: 20,
-    fontWeight: 600,
-  }
 
   useEffect(() => {
     if (!map.current) {
@@ -70,10 +54,9 @@ const Map = () => {
 
       if (coordinates && coordinates.length >= 2) {
         const origin = [coordinates[0].longitude, coordinates[0].latitude];
-        const waypoints = coordinates.slice(1, -1).map((coord) => [
-          coord.longitude,
-          coord.latitude,
-        ]);
+        const waypoints = coordinates
+          .slice(1, -1)
+          .map((coord) => [coord.longitude, coord.latitude]);
 
         const destination = [
           coordinates[coordinates.length - 1].longitude,
@@ -109,18 +92,31 @@ const Map = () => {
                 name: { fr: name = "N/A" } = {},
                 description: { fr: description = "N/A" } = {},
                 creationDate: creationdate,
-                category: image = ""
+                category: image = "",
               } = currentMonumentData;
-  
+
               const imageName = `${image.toLowerCase()}.jpg`;
               const imagePath = `./src/assets/${imageName}`;
-  
+
               return (
-                <div key={index} style={{ marginBottom: 50 }}>
-                  <img src={imagePath} alt={image} style={imageStyle} />
-                  <h1 style={titleStyle}>{name}</h1>
-                  <h1 style={DateStyle}> Date de Création : {creationdate}</h1>
-                  <p style={descriptionStyle}>{description}</p>
+                <div key={index} >
+                  <Divider style={titleStyle} >{name}</Divider>
+                  <Image
+                    className="description-image"
+                    wrapperClassName="description-image-w"
+                    width={300}
+                    src={imagePath}
+                  />
+                  <h1 className="date-creation" >
+                    {" "}
+                    Date de Création :{" "}
+                    {Intl.DateTimeFormat("fr-FR", {
+                      year: "numeric",
+                      month: "long",
+                      day: "numeric",
+                    }).format(new Date(creationdate))}
+                  </h1>
+                  <p className="monument-description">{description}</p>
                 </div>
               );
             })}

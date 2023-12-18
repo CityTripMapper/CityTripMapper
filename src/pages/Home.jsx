@@ -52,7 +52,6 @@ function Home() {
     navigate("/Map", { state: { coordinates, selectedMonumentsData } });
   };
 
-  console.log(monumentOptions)
   return (
     <Row align={"middle"} style={{ marginLeft: "30px" }} data-testid="home-component">
       <Col span={12}>
