@@ -44,6 +44,12 @@ const Map = () => {
     marginBottom: 50,  
   }
 
+  const DateStyle={
+    color: "black",
+    fontSize: 20,
+    fontWeight: 600,
+  }
+
   useEffect(() => {
     if (!map.current) {
       map.current = new mapboxgl.Map({
@@ -99,22 +105,21 @@ const Map = () => {
           <div>
             {coordinates.map((monument, index) => {
               const currentMonumentData = selectedMonumentsData[index] || {};
-              const name = currentMonumentData.name && currentMonumentData.name.fr ? currentMonumentData.name.fr : "N/A";
-              const description =
-                currentMonumentData.description && currentMonumentData.description.fr
-                  ? currentMonumentData.description.fr
-                  : "N/A";
-
-              const image = currentMonumentData.category || "";
+              const {
+                name: { fr: name = "N/A" } = {},
+                description: { fr: description = "N/A" } = {},
+                creationDate: creationdate,
+                category: image = ""
+              } = currentMonumentData;
+  
               const imageName = `${image.toLowerCase()}.jpg`;
-              const imagePath =  `src/assets/${imageName}`;
-              console.log('Complete Image Path:', imagePath);
-              
-
+              const imagePath = `./src/assets/${imageName}`;
+  
               return (
                 <div key={index} style={{ marginBottom: 50 }}>
-                <img src={imagePath} alt={image} style={imageStyle} />
+                  <img src={imagePath} alt={image} style={imageStyle} />
                   <h1 style={titleStyle}>{name}</h1>
+                  <h1 style={DateStyle}> Date de Création : {creationdate}</h1>
                   <p style={descriptionStyle}>{description}</p>
                 </div>
               );
@@ -125,6 +130,7 @@ const Map = () => {
       <div ref={mapContainer} className="map-container" />
     </div>
   );
+  
 };
 
 const AnyReactComponent = ({ text }) => <div>{text}</div>;
