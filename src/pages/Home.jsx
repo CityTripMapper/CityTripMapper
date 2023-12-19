@@ -1,72 +1,68 @@
 import { Button, Col, Row, Image, Select, Form } from "antd";
 import { useNavigate } from "react-router-dom";
-
+import { useState, useEffect } from "react";
+import { storage } from "../../firebase";
+import { getDownloadURL, ref } from "firebase/storage";
 import planImg from "../assets/plan.png";
 
 function Home() {
-  const monumentOptions = [
-    {
-      label: "Eiffel Tower",
-      value: "eiffel",
-    },
-    {
-      label: "Louvre",
-      value: "louvre",
-    },
-    {
-      label: "Notre-Dame Cathedral",
-      value: "notre-dame",
-    },
-    {
-      label: "Arc de Triomphe",
-      value: "arc-de-triomphe",
-    },
-    {
-      label: "Montmartre",
-      value: "montmartre",
-    },
-    {
-      label: "Palace of Versailles",
-      value: "versailles",
-    },
-    {
-      label: "Seine River Cruise",
-      value: "seine-cruise",
-    },
-    {
-      label: "Moulin Rouge",
-      value: "moulin-rouge",
-    },
-    {
-      label: "Pantheon",
-      value: "pantheon",
-    },
-    {
-      label: "Sainte-Chapelle",
-      value: "sainte-chapelle",
-    },
-  ];
-
+  const [monumentOptions, setMonumentOptions] = useState([]);
+  const [allMonuments, setAllMonuments] = useState([]); // New state variable
   const navigate = useNavigate();
+
+  useEffect(() => {
+    // const fileRef = ref(storage, "monumentsParis.json");
+    const fileRef = ref(storage, "monumentstest.json");
+
+    getDownloadURL(fileRef)
+      .then((url) => {
+        const timestampedURL = `${url}?_=${new Date().getTime()}`;
+        return fetch(timestampedURL);
+      })
+      .then((response) => response.json())
+      .then((data) => {
+        // console.log("Fetched Monument Data:", data);
+        setAllMonuments(data); // Store all monuments in state
+        setMonumentOptions(
+          data.map((monument) => ({
+            label: monument.name.fr,
+            value: monument.latitude + "," + monument.longitude,
+            ...monument,
+          }))
+        );
+      })
+      .catch((error) => {
+        console.error("Error fetching data:", error);
+      });
+  }, []);
 
   const handleSubmit = (values) => {
     const { selectedMonuments } = values;
-    // Handle the selected monuments here
-    console.log("Selected Monuments:", selectedMonuments);
 
-    // Route to "./pages/Map" when the form is submitted
-    navigate("/Map");
+    const selectedMonumentsData = allMonuments.filter((monument) =>
+      selectedMonuments.includes(`${monument.latitude},${monument.longitude}`)
+    );
+
+    const coordinates = selectedMonumentsData.map((monument) => ({
+      latitude: parseFloat(monument.latitude),
+      longitude: parseFloat(monument.longitude),
+    }));
+
+    // Pass selectedMonumentsData to Map component
+    navigate("/Map", { state: { coordinates, selectedMonumentsData } });
   };
 
+  console.log(monumentOptions);
   return (
-    <Row align={"middle"} style={{ marginLeft: "30px" }}>
-      <Col span={12}>
+    <Row align={"middle"} style={{ marginLeft: "30px" }} data-testid="home-component">
+      <Col xs={24} sm={12}>
         <h2 style={{ color: "#75BF7A", textTransform: "uppercase" }}>
-          SELECT MONUMENTS
+          Monuments sélectionnés
         </h2>
         <Form onFinish={handleSubmit}>
           <Form.Item name="selectedMonuments">
             <Select
+              data-testid="monument-select"
               className="MonumentSelect"
               size="large"
               placement="topLeft"
@@ -76,7 +72,7 @@ function Home() {
                 width: "70%",
                 marginBottom: "50px",
               }}
-              placeholder="Select Monument"
+              placeholder="Monument sélectionné"
               options={monumentOptions}
             />
           </Form.Item>
@@ -85,12 +81,12 @@ function Home() {
           </Form.Item>
         </Form>
         <h3>
-          {
-            "Our app helps you effortlessly navigate to the city's most renowned monuments and landmarks, ensuring you make the most of your urban exploration"
-          }
+          Notre application vous aide à naviguer sans effort vers les monuments et les sites
+          les plus renommés de la ville, garantissant que vous profitiez au maximum de votre
+          exploration urbaine.
         </h3>
       </Col>
-      <Col span={12}>
+      <Col xs={24} sm={12}>
         <Image src={planImg} preview={false} />
       </Col>
     </Row>

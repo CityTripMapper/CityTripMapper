@@ -10,7 +10,7 @@
 }
 
 .ant-menu {
-  display: flex;
+  display: flow;
 
 }
 
@@ -26,8 +26,7 @@
 
 .ant-menu-horizontal {
   border-bottom: 2px solid #F9F9F9;
-  background-color: white;
-  width: 100%;
+  background-color: white
 }
 
 .App {
