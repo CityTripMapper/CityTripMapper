@@ -31,14 +31,25 @@ const Map = () => {
     fontWeight: 600,
   };
 
-  
+const addMarkers = (map, coordinates) => {
+  coordinates.forEach((coord, index) => {
+    // Check if a marker already exists at the current coordinate
+    const existingMarker = map.getLayer(`marker-${index}`);
+    if (!existingMarker) {
+      new mapboxgl.Marker({ color: "#58b4e3" }) // Customize marker appearance if needed
+        .setLngLat([coord.longitude, coord.latitude])
+        .addTo(map)
+        .setPopup(new mapboxgl.Popup().setHTML(`<p>Marker ${index + 1}</p>`));
+    }
+  });
+};
 
 
   useEffect(() => {
     if (!map.current) {
       map.current = new mapboxgl.Map({
         container: mapContainer.current,
-        style: "mapbox://styles/mapbox/streets-v12",
+        style: import.meta.env.VITE_MAPBOX_STYLES_PATH,
         center: [2.3522, 48.8566],
         zoom: 12,
       });
@@ -53,6 +64,7 @@ const Map = () => {
       map.current.addControl(directions, "top-left");
 
       if (coordinates && coordinates.length >= 2) {
+        addMarkers(map.current, coordinates);
         const origin = [coordinates[0].longitude, coordinates[0].latitude];
         const waypoints = coordinates
           .slice(1, -1)
@@ -79,7 +91,7 @@ const Map = () => {
 
 
   return (
-    <div>
+    <div data-testid="map-container">
       <div className="BottomLeftButton" onClick={showDrawer}>
         <Button>Click to view Informations</Button>
       </div>
@@ -96,8 +108,20 @@ const Map = () => {
               } = currentMonumentData;
 
               const imageName = `${image.toLowerCase()}.jpg`;
-              const imagePath = `./src/assets/${imageName}`;
-
+              const imagePath = import.meta.env.VITE_IMAGES_PATH + imageName;
+              const dateFormat = import.meta.env.REACT_APP_DATE_FORMAT || {
+                year: "numeric",
+                month: "long",
+                day: "numeric",
+              };
+              // Function to handle special case for "19th century"
+              const formatSpecialDate = (date) => {
+                if (date.toLowerCase().includes("century")) {
+                  return date;
+                } else {
+                  return Intl.DateTimeFormat("fr-FR", dateFormat).format(new Date(date));
+                }
+              };
               return (
                 <div key={index} >
                   <Divider style={titleStyle} >{name}</Divider>
@@ -107,15 +131,11 @@ const Map = () => {
                     width={300}
                     src={imagePath}
                   />
-                  <h1 className="date-creation" >
-                    {" "}
-                    Date de Création :{" "}
-                    {Intl.DateTimeFormat("fr-FR", {
-                      year: "numeric",
-                      month: "long",
-                      day: "numeric",
-                    }).format(new Date(creationdate))}
-                  </h1>
+                  <h1 className="date-creation">
+                  {" "}
+                  Date de Création :{" "}
+                  {formatSpecialDate(creationdate)}
+                </h1>
                   <p className="monument-description">{description}</p>
                 </div>
               );
@@ -126,7 +146,6 @@ const Map = () => {
       <div ref={mapContainer} className="map-container" />
     </div>
   );
-  
 };
 
 const AnyReactComponent = ({ text }) => <div>{text}</div>;
