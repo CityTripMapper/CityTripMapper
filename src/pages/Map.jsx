@@ -31,19 +31,27 @@ const Map = () => {
     fontWeight: 600,
   };
 
-const addMarkers = (map, coordinates) => {
-  coordinates.forEach((coord, index) => {
-    // Check if a marker already exists at the current coordinate
-    const existingMarker = map.getLayer(`marker-${index}`);
-    if (!existingMarker) {
-      new mapboxgl.Marker({ color: "#58b4e3" }) // Customize marker appearance if needed
-        .setLngLat([coord.longitude, coord.latitude])
-        .addTo(map)
-        .setPopup(new mapboxgl.Popup().setHTML(`<p>Marker ${index + 1}</p>`));
+  const generateRandomColor = () => {
+    const letters = "0123456789ABCDEF";
+    let color = "#";
+    for (let i = 0; i < 6; i++) {
+      color += letters[Math.floor(Math.random() * 16)];
     }
-  });
-};
+    return color;
+  };
 
+  const addMarkers = (map, coordinates, colors) => {
+    coordinates.forEach((coord, index) => {
+      const color = colors[index] || "#58b4e3"; // Use the provided color or a default one
+      const existingMarker = map.getLayer(`marker-${index}`);
+      if (!existingMarker) {
+        new mapboxgl.Marker({ color })
+          .setLngLat([coord.longitude, coord.latitude])
+          .addTo(map)
+          .setPopup(new mapboxgl.Popup().setHTML(`<p>Marker ${index + 1}</p>`));
+      }
+    });
+  };
 
   useEffect(() => {
     if (!map.current) {
@@ -64,7 +72,11 @@ const addMarkers = (map, coordinates) => {
       map.current.addControl(directions, "top-left");
 
       if (coordinates && coordinates.length >= 2) {
-        addMarkers(map.current, coordinates);
+        const markerColors = Array.from({ length: coordinates.length }, () =>
+          generateRandomColor()
+        );
+        addMarkers(map.current, coordinates, markerColors);
+
         const origin = [coordinates[0].longitude, coordinates[0].latitude];
         const waypoints = coordinates
           .slice(1, -1)
@@ -87,8 +99,6 @@ const addMarkers = (map, coordinates) => {
       };
     }
   }, [coordinates]);
-
-
 
   return (
     <div data-testid="map-container">
@@ -132,10 +142,10 @@ const addMarkers = (map, coordinates) => {
                     src={imagePath}
                   />
                   <h1 className="date-creation">
-                  {" "}
-                  Date de Création :{" "}
-                  {formatSpecialDate(creationdate)}
-                </h1>
+                    {" "}
+                    Date de Création :{" "}
+                    {formatSpecialDate(creationdate)}
+                  </h1>
                   <p className="monument-description">{description}</p>
                 </div>
               );
