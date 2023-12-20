@@ -31,9 +31,6 @@ const Map = () => {
     fontWeight: 600,
   };
 
-  
-
-
   useEffect(() => {
     if (!map.current) {
       map.current = new mapboxgl.Map({
@@ -63,10 +60,25 @@ const Map = () => {
           coordinates[coordinates.length - 1].latitude,
         ];
 
+        // Add marker for origin with a different color
+        const originMarker = new mapboxgl.Marker({ color: "#00FF00" })
+          .setLngLat(origin)
+          .addTo(map.current);
+
         directions.setOrigin(origin);
         waypoints.forEach((waypoint, index) => {
+          // Add marker for each waypoint with a different color
+          const waypointMarker = new mapboxgl.Marker({ color: `#${(index + 1) * 100}0000` })
+            .setLngLat(waypoint)
+            .addTo(map.current);
           directions.addWaypoint(index, waypoint);
         });
+
+        // Add marker for destination with a different color
+        const destinationMarker = new mapboxgl.Marker({ color: "#FF0000" })
+          .setLngLat(destination)
+          .addTo(map.current);
+
         directions.setDestination(destination);
       }
 

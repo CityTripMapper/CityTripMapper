@@ -26,7 +26,7 @@ function Home() {
         setMonumentOptions(
           data.map((monument) => ({
             label: monument.name.fr,
-            value: monument.latitude + ',' + monument.longitude,
+            value: monument.latitude + "," + monument.longitude,
             ...monument,
           }))
         );
@@ -52,12 +52,16 @@ function Home() {
     navigate("/Map", { state: { coordinates, selectedMonumentsData } });
   };
 
-  console.log(monumentOptions)
+  console.log(monumentOptions);
   return (
-    <Row align={"middle"} style={{ marginLeft: "30px" }} data-testid="home-component">
+    <Row
+      align={"middle"}
+      style={{ marginLeft: "30px" }}
+      data-testid="home-component"
+    >
       <Col span={12}>
         <h2 style={{ color: "#75BF7A", textTransform: "uppercase" }}>
-          SELECT MONUMENTS
+        Monuments sélectionnés
         </h2>
         <Form onFinish={handleSubmit}>
           <Form.Item name="selectedMonuments">
@@ -72,7 +76,7 @@ function Home() {
                 width: "70%",
                 marginBottom: "50px",
               }}
-              placeholder="Select Monument"
+              placeholder="Monument sélectionné"
               options={monumentOptions}
             />
           </Form.Item>
@@ -82,7 +86,7 @@ function Home() {
         </Form>
         <h3>
           {
-            "Our app helps you effortlessly navigate to the city's most renowned monuments and landmarks, ensuring you make the most of your urban exploration"
+            "Notre application vous aide à naviguer sans effort vers les monuments et les sites les plus renommés de la ville, garantissant que vous profitiez au maximum de votre exploration urbaine."
           }
         </h3>
       </Col>
