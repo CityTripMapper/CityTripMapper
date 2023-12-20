@@ -38,53 +38,63 @@ const Map = () => {
     color: "blue",
     textTransform: "uppercase",
   };
-  
-  const imageStyle={
+
+  const imageStyle = {
     width: 300,
-    marginBottom: 50,  
+    marginBottom: 50,
   }
 
   useEffect(() => {
-    if (!map.current) {
-      map.current = new mapboxgl.Map({
-        container: mapContainer.current,
-        style: "mapbox://styles/mapbox/streets-v12",
-        center: [2.3522, 48.8566],
-        zoom: 12,
-      });
+    console.log("Map component is rendered!");
+    // Resto del código...
+  }, []);
 
-      map.current.on("move", () => {});
-
-      const directions = new MapboxDirections({
-        accessToken: mapboxgl.accessToken,
-        profile: "mapbox/walking",
-      });
-
-      map.current.addControl(directions, "top-left");
-
-      if (coordinates && coordinates.length >= 2) {
-        const origin = [coordinates[0].longitude, coordinates[0].latitude];
-        const waypoints = coordinates.slice(1, -1).map((coord) => [
-          coord.longitude,
-          coord.latitude,
-        ]);
-
-        const destination = [
-          coordinates[coordinates.length - 1].longitude,
-          coordinates[coordinates.length - 1].latitude,
-        ];
-
-        directions.setOrigin(origin);
-        waypoints.forEach((waypoint, index) => {
-          directions.addWaypoint(index, waypoint);
+  useEffect(() => {
+    try {
+      if (!map.current) {
+        map.current = new mapboxgl.Map({
+          container: mapContainer.current,
+          style: "mapbox://styles/mapbox/streets-v12",
+          center: [2.3522, 48.8566],
+          zoom: 12,
         });
-        directions.setDestination(destination);
-      }
 
-      return () => {
-        map.current.remove();
-      };
+        map.current.on("move", () => { });
+
+        const directions = new MapboxDirections({
+          accessToken: mapboxgl.accessToken,
+          profile: "mapbox/walking",
+        });
+
+        map.current.addControl(directions, "top-left");
+
+        if (coordinates && coordinates.length >= 2) {
+          const origin = [coordinates[0].longitude, coordinates[0].latitude];
+          const waypoints = coordinates.slice(1, -1).map((coord) => [
+            coord.longitude,
+            coord.latitude,
+          ]);
+
+          const destination = [
+            coordinates[coordinates.length - 1].longitude,
+            coordinates[coordinates.length - 1].latitude,
+          ];
+
+          directions.setOrigin(origin);
+          waypoints.forEach((waypoint, index) => {
+            directions.addWaypoint(index, waypoint);
+          });
+          directions.setDestination(destination);
+        }
+
+        return () => {
+          map.current.remove();
+        };
+      }
+    } catch (error) {
+      console.log(error)
     }
+
   }, [coordinates]);
 
 
@@ -107,13 +117,13 @@ const Map = () => {
 
               const image = currentMonumentData.category || "";
               const imageName = `${image.toLowerCase()}.jpg`;
-              const imagePath =  `src/assets/${imageName}`;
+              const imagePath = `src/assets/${imageName}`;
               console.log('Complete Image Path:', imagePath);
-              
+
 
               return (
                 <div key={index} style={{ marginBottom: 50 }}>
-                <img src={imagePath} alt={image} style={imageStyle} />
+                  <img src={imagePath} alt={image} style={imageStyle} />
                   <h1 style={titleStyle}>{name}</h1>
                   <p style={descriptionStyle}>{description}</p>
                 </div>
@@ -122,7 +132,7 @@ const Map = () => {
           </div>
         </Drawer>
       </div>
-      <div ref={mapContainer} className="map-container" />
+      <div ref={mapContainer} data-testid="map-element" className="map-container" />
     </div>
   );
 };

@@ -1,4 +1,3 @@
-import React from 'react'
 import { describe, it, expect } from 'vitest'
 import { render, screen, fireEvent } from '@testing-library/react'
 import { MemoryRouter } from 'react-router-dom';
@@ -14,7 +13,7 @@ describe('Home', () => {
         expect(screen.getByText('SELECT MONUMENTS')).toBeInTheDocument();
     });
 
-    it('should select a monument from the list', () => {
+    it('should select a monument from the list', async () => {
         render(
             <MemoryRouter>
                 <Home />
@@ -22,9 +21,14 @@ describe('Home', () => {
         );
 
         const selectElement = screen.getByTestId('monument-select').querySelector('input');
-        fireEvent.change(selectElement, { target: { value: 'Tour Eiffel' } });
+        fireEvent.mouseDown(selectElement); // Opens the select dropdown
 
-        const selectedOption = screen.getByText('Tour Eiffel');
+        await new Promise((resolve) => setTimeout(resolve, 500));
+
+        const optionToSelect = await screen.findByText('Tour Eiffel');
+        fireEvent.click(optionToSelect);
+
+        const selectedOption = screen.getAllByText('Tour Eiffel')[0];
         expect(selectedOption).toBeInTheDocument();
     });
 });

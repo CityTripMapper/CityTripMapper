@@ -48,11 +48,12 @@ function Home() {
       longitude: parseFloat(monument.longitude),
     }));
 
+    console.log("Holis")
+
     // Pass selectedMonumentsData to Map component
     navigate("/Map", { state: { coordinates, selectedMonumentsData } });
   };
 
-  console.log(monumentOptions)
   return (
     <Row align={"middle"} style={{ marginLeft: "30px" }} data-testid="home-component">
       <Col span={12}>
@@ -62,6 +63,7 @@ function Home() {
         <Form onFinish={handleSubmit}>
           <Form.Item name="selectedMonuments">
             <Select
+              id="monument-select"
               data-testid="monument-select"
               className="MonumentSelect"
               size="large"
@@ -77,8 +79,9 @@ function Home() {
             />
           </Form.Item>
           <Form.Item>
-            <Button htmlType="submit">Submit</Button>
+            <Button htmlType="submit" className="custom-button-class">Submit</Button>
           </Form.Item>
+
         </Form>
         <h3>
           {
