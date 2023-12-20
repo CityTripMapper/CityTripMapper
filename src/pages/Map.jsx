@@ -101,7 +101,7 @@ const Map = () => {
   }, [coordinates]);
 
   return (
-    <div data-testid="map-container">
+    <div>
       <div className="BottomLeftButton" onClick={showDrawer}>
         <Button>Click to view Informations</Button>
       </div>
@@ -153,7 +153,7 @@ const Map = () => {
           </div>
         </Drawer>
       </div>
-      <div ref={mapContainer} className="map-container" />
+      <div ref={mapContainer} data-testid="map-element" className="map-container" />
     </div>
   );
 };

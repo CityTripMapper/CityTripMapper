@@ -1,40 +1,44 @@
-// Map.test.jsx
-import React from 'react';
-import { render, screen } from '@testing-library/react';
-import { describe, test } from 'vitest';
-import mockMapboxGl from 'jest-mock';
+// Test
 
-// Mock mapbox-gl
-jest.mock('mapbox-gl', () => mockMapboxGl);
+import { render, screen, fireEvent } from '@testing-library/react';
+import { MemoryRouter, Route, Routes } from 'react-router-dom';
+import { Home } from './Home';
+import { Map } from './Map';
+import { describe, expect, it } from 'vitest';
 
-describe('Map Component', () => {
-  test('renders map container and monuments drawer', () => {
-    const coordinates = [
-      { latitude: 48.8566, longitude: 2.3522 },
-      // Add more coordinates as needed
-    ];
+describe('Map', () => {
+    it('selects two monuments and submits, then shows the map with the itinerary', async () => {
+        render(
+            <MemoryRouter initialIndex={0} initialEntries={['/']}>
+                <Routes>
+                    <Route path="/" element={<Home />} />
+                    <Route path="/Map" element={<Map />} />
+                </Routes>
+            </MemoryRouter>
+        );
+      // Simulate selecting monuments
+      const selectElement = screen.getByTestId('monument-select').querySelector('input');
+      fireEvent.mouseDown(selectElement); // Opens the select dropdown
 
-    const selectedMonumentsData = [
-      // Add sample monument data as needed
-    ];
+      await new Promise((resolve) => setTimeout(resolve, 500));
 
-    render(<Map />, {
-      initialState: {
-        location: {
-          state: {
-            coordinates,
-            selectedMonumentsData,
-          },
-        },
-      },
+      let optionToSelect = await screen.findByText('Tour Eiffel');
+      fireEvent.click(optionToSelect);
+      
+      await new Promise((resolve) => setTimeout(resolve, 500));
+
+      optionToSelect = await screen.findByText('Musée du Louvre');
+      fireEvent.click(optionToSelect);
+
+      
+      // Simulate clicking the submit button
+      const submitButton = screen.getByRole('button', { name: 'Submit' });
+      fireEvent.click(submitButton);
+
+      await new Promise((resolve) => setTimeout(resolve, 500));
+
+      const mapElement = screen.getByTestId('map-element');
+      expect(mapElement).toBeInTheDocument();
+
     });
-
-    // Check if map container is rendered
-    const mapContainer = screen.getByTestId('map-container');
-    expect(mapContainer).toBeInTheDocument();
-
-    // Check if monuments drawer is rendered
-    const monumentsDrawer = screen.getByTestId('monuments-drawer');
-    expect(monumentsDrawer).toBeInTheDocument();
-  });
 });
