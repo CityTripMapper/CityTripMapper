@@ -2,7 +2,7 @@
 
 import { render, screen, fireEvent } from '@testing-library/react';
 import { MemoryRouter, Route, Routes } from 'react-router-dom';
-import { Home } from './Home';
+import { Home } from '../src/Home';
 import { Map } from './Map';
 import { describe, expect, it } from 'vitest';
 
