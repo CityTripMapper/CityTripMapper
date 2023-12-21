@@ -102,7 +102,7 @@ const Map = () => {
   return (
     <div>
       <div className="BottomLeftButton" onClick={showDrawer}>
-        <Button>Click to view Informations</Button>
+        <Button data-testid="click-to-view-information-button">Click to view Informations</Button>
       </div>
       <div className="MonumentsDrawer">
         <Drawer title="Your Monuments Order" placement="right" onClose={onClose} open={open}>
@@ -124,8 +124,8 @@ const Map = () => {
               return (
                 <div key={index} style={{ marginBottom: 50 }}>
                   <img src={imagePath} alt={image} style={imageStyle} />
-                  <h1 style={titleStyle}>{name}</h1>
-                  <p style={descriptionStyle}>{description}</p>
+                  <h1 className="info-monument-name" style={titleStyle}>{name}</h1>
+                  <p className="info-monument-description" style={descriptionStyle}>{description}</p>
                 </div>
               );
             })}
