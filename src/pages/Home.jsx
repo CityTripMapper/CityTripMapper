@@ -3,11 +3,11 @@ import { useNavigate } from "react-router-dom";
 import { useState, useEffect } from "react";
 import { storage } from "../../firebase";
 import { getDownloadURL, ref } from "firebase/storage";
-import planImg from "../assets/plan.png";
 
 function Home() {
   const [monumentOptions, setMonumentOptions] = useState([]);
   const [allMonuments, setAllMonuments] = useState([]); // New state variable
+  const planImg = import.meta.env.VITE_IMAGES_PATH+"plan.png"
   const navigate = useNavigate();
 
   useEffect(() => {

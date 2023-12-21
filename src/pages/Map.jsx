@@ -113,7 +113,7 @@ const Map = () => {
               const {
                 name: { fr: name = "N/A" } = {},
                 description: { fr: description = "N/A" } = {},
-                creationDate: creationdate,
+                creationDate,
                 category: image = "",
               } = currentMonumentData;
 
@@ -124,29 +124,29 @@ const Map = () => {
                 month: "long",
                 day: "numeric",
               };
-              // Function to handle special case for "19th century"
+
               const formatSpecialDate = (date) => {
-                if (date.toLowerCase().includes("century")) {
-                  return date;
-                } else {
+                if (date && !isNaN(new Date(date))) {
                   return Intl.DateTimeFormat("fr-FR", dateFormat).format(new Date(date));
                 }
+                return "N/A";
               };
+
               return (
-                <div key={index} >
-                  <Divider style={titleStyle} >{name}</Divider>
+                <div key={index}>
+                  <Divider style={titleStyle}>{name}</Divider>
                   <Image
                     className="description-image"
                     wrapperClassName="description-image-w"
                     width={300}
                     src={imagePath}
                   />
-                  <h1 className="date-creation">
-                    {" "}
-                    Date de Création :{" "}
-                    {formatSpecialDate(creationdate)}
-                  </h1>
-                  <p className="monument-description">{description}</p>
+                  {creationDate && (
+                    <h1 className="date-creation">
+                      Date de Création : {formatSpecialDate(creationDate)}
+                    </h1>
+                  )}
+                  {description && <p className="monument-description">{description}</p>}
                 </div>
               );
             })}
