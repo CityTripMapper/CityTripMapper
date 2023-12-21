@@ -1,0 +1,78 @@
+.steps_timeline {
+    flex: 1;
+    /* Make the timeline fill the remaining vertical space */
+    margin-top: 40px;
+}
+
+.help_container {
+    height: 100vh;
+    /* Set the container height to 100% of the viewport height */
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    background: #ffffff;
+    padding: 10rem 0 0 0;
+}
+
+.ant-timeline-item-content {
+    max-width: 80%;
+    word-wrap: break-word;
+    height: 120px;
+}
+
+.ant-timeline-item-content {
+    font-size: 18px;
+    margin-top: 8px;
+    /* Add some top margin for spacing */
+}
+.ant-timeline-item-tail{
+    
+    background-color: #75bf7a;
+    font-weight: 900;
+}
+.ant-timeline-item-content {
+    font-size: 18px;
+    margin-top: 8px;
+    font-style: italic;
+    color: #75bf7a;
+    font-weight: bolder;
+    
+}
+.title_steps{
+    text-align: center;
+    position: relative;
+    color: #75bf7a;
+    font-size: 4.5rem;
+    line-height: 1.22727;
+    font-weight: 550;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    margin-block-start: 1em;
+    margin-block-end: 1em;
+    margin-inline-start: 0;
+    margin-inline-end: 0;
+    z-index: 2;
+}
+.title_steps::before{
+    content: "suivez ";
+    position: absolute;
+    font-weight: 900;
+    top: -0.8em;
+    left: 0;
+    width: 100%;
+    font-size: 2.05em;
+    color: rgba(224, 224, 224, 0.3);
+    z-index: -1;
+}
+.title_steps::after{
+    content: "ces";
+    font-weight: 800;
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    font-size: 2.2em;
+    color: rgba(224, 224, 224, 0.3);
+    z-index: -1;
+}

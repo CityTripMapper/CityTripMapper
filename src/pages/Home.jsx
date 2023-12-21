@@ -21,7 +21,6 @@ function Home() {
       })
       .then((response) => response.json())
       .then((data) => {
-        // console.log("Fetched Monument Data:", data);
         setAllMonuments(data); // Store all monuments in state
         setMonumentOptions(
           data.map((monument) => ({
@@ -52,7 +51,6 @@ function Home() {
     navigate("/Map", { state: { coordinates, selectedMonumentsData } });
   };
 
-  console.log(monumentOptions);
   return (
     <Row
       align={"middle"}
@@ -61,7 +59,7 @@ function Home() {
     >
       <Col span={12}>
         <h2 style={{ color: "#75BF7A", textTransform: "uppercase" }}>
-        Monuments sélectionnés
+          Monuments sélectionnés
         </h2>
         <Form onFinish={handleSubmit}>
           <Form.Item name="selectedMonuments">

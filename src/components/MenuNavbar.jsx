@@ -39,11 +39,7 @@ const MenuComponent = ({ current, onClick }) => {
       key: "home",
       icon: <HomeTwoTone style={iconStyle} />,
     },
-    {
-      label: "HOW IT WORKS",
-      key: "how",
-      icon: <BulbTwoTone style={iconStyle} />,
-    },
+
     {
       label: "MONUMENTS",
       key: "monuments",
@@ -56,8 +52,9 @@ const MenuComponent = ({ current, onClick }) => {
           icon={<AlertTwoTone twoToneColor="white" style={iconStyle} />}
           size="large"
           style={buttonStyle}
+          href="Help"
         >
-          HELP CENTER
+          HELP
         </Button>
       ),
       key: "Help",

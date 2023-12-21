@@ -2,7 +2,7 @@ import { ConfigProvider, FloatButton } from "antd";
 import React, { useState } from "react";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import MenuComponent from "./components/MenuNavbar";
-import { Home, Map } from "./pages";
+import { Home, Map , Help } from "./pages";
 
 import "./App.css";
 
@@ -45,6 +45,7 @@ function App() {
             <Routes>
               <Route path="/" element={<Home />} />
               <Route path="/Map" element={<Map />} />
+              <Route path="/Help" element={<Help/>}/>
             </Routes>
           </div>
           <FloatButton.BackTop />
