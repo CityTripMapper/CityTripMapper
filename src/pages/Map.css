@@ -85,3 +85,25 @@
         border-color: #75bf7a;
     }
 }
+
+.mapbox-directions-component-keyline{
+    visibility: hidden;
+    display: none;
+}
+.mapbox-directions-profile{
+    visibility: visible;
+    display: block !important;
+}
+.directions-control.directions-control-directions{
+    background: #75bf7a;
+}
+.mapbox-directions-route-summary{
+    background: #375539;
+
+}
+
+@media (max-width: 768px) {
+    .directions-control-instructions {
+      display: none;
+    }
+  }
