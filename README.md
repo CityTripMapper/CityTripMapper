@@ -1,3 +1,4 @@
+![Capture d'écran 2024-01-31 170531](https://github.com/CityTripMapper/CityTripMapper/assets/74555657/0be556bf-08a7-44d8-84ec-59d2cdf04103)
 
 # CityTripMapper
 
@@ -54,6 +55,4 @@ Before you begin, ensure you have the following installed:
 
 This project is licensed under the MIT License.
 
-
-![Capture d'écran 2024-01-31 170531](https://github.com/CityTripMapper/CityTripMapper/assets/74555657/0be556bf-08a7-44d8-84ec-59d2cdf04103)
 
